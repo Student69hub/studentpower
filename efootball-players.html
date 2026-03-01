@@ -1,0 +1,272 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายชื่อนักแข่ง | eFootball Student League</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .player-list-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .player-count-badge {
+            display: inline-block;
+            background: var(--color-primary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin-top: 1rem;
+            box-shadow: 0 10px 20px rgba(255, 115, 0, 0.2);
+        }
+
+        .player-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .player-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--color-gray-100);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .player-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .player-team-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .player-info-content h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: var(--color-dark);
+            font-weight: 700;
+        }
+
+        .player-info-content p {
+            margin: 0.25rem 0 0;
+            color: var(--color-gray-500);
+            font-size: 0.9rem;
+        }
+
+        .player-id-tag {
+            display: inline-block;
+            background: var(--color-gray-100);
+            color: var(--color-gray-600);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            font-family: monospace;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: var(--color-gray-50);
+            border-radius: var(--radius-2xl);
+            border: 2px dashed var(--color-gray-200);
+            grid-column: 1 / -1;
+        }
+    </style>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="particles-js-global"
+        style="position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; z-index: -2; pointer-events: none;"></div>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/school-logo.png" alt="โลโก้พรรคนักเรียน" class="nav-logo-img">
+                <span class="nav-logo-text">พรรคนักเรียน</span>
+            </a>
+            <button type="button" class="nav-toggle" id="nav-toggle" aria-label="เปิดเมนู">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">หน้าแรก</a></li>
+                <li class="nav-item-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">ประกาศข่าวสาร ▾</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="news-efootball.html">ข่าวสาร Efootball</a></li>
+                        <li><a href="news-classroom.html">ประกวดห้องเรียน</a></li>
+                        <li><a href="news-general.html">ข่าวสารทั่วไป</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item-dropdown">
+                    <a href="efootball.html" class="nav-dropdown-toggle active">การแข่งขัน Efootball ▾</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="efootball-register.html">สมัครนักแข่ง</a></li>
+                        <li><a href="efootball.html">ตารางคะแนน</a></li>
+                        <li><a href="efootball-players.html" class="active">รายชื่อนักแข่ง</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="page-enter">
+        <div class="container">
+            <div class="player-list-header" data-aos="fade-up">
+                <h1 class="section-title">👥 รายชื่อนักแข่งที่เข้าร่วม</h1>
+                <div id="player-count" class="player-count-badge">ทั้งหมด 0 คน</div>
+            </div>
+
+            <div id="player-grid" class="player-grid">
+                <!-- JS will inject player cards here -->
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-bottom">
+                © พรรคนักเรียน — Create your legend in eFootball
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const playerGrid = document.getElementById('player-grid');
+            const playerCount = document.getElementById('player-count');
+
+            playerGrid.innerHTML = '<div style="text-align:center; padding: 2rem; grid-column: 1/-1;">กำลังโหลดข้อมูลนักแข่ง... ⚽</div>';
+
+            setTimeout(() => {
+                if (!window.firebaseDB) {
+                    console.error("Firebase not loaded yet");
+                    playerGrid.innerHTML = '<div style="text-align:center; padding: 2rem; color: #ef4444; grid-column: 1/-1;">เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล</div>';
+                    return;
+                }
+
+                const playersRef = window.firebaseRef(window.firebaseDB, 'players');
+
+                window.firebaseOnValue(playersRef, (snapshot) => {
+                    const players = [];
+                    if (snapshot.exists()) {
+                        snapshot.forEach((childSnapshot) => {
+                            players.push(childSnapshot.val());
+                        });
+                    }
+                    playerCount.textContent = `ทั้งหมด ${players.length} คน`;
+
+                    // Check if current user was deleted by admin
+                    const isRegistered = localStorage.getItem('efootball_user_registered') === 'true';
+                    const storedName = localStorage.getItem('efootball_user_name');
+
+                    if (isRegistered) {
+                        let shouldReset = false;
+                        if (players.length === 0) {
+                            shouldReset = true; // Everyone was deleted
+                        } else if (storedName) {
+                            // Check if their specific name is still in the list
+                            const stillExists = players.some(p => p.playerName && p.playerName.toLowerCase() === storedName.toLowerCase());
+                            if (!stillExists) {
+                                shouldReset = true;
+                            }
+                        }
+
+                        if (shouldReset) {
+                            localStorage.removeItem('efootball_user_registered');
+                            localStorage.removeItem('efootball_user_name');
+                            const btn = document.getElementById('new-player-btn');
+                            if (btn) btn.style.display = 'inline-block'; // Show button again
+                            console.log("Auto-reset LocalStorage: User was deleted.");
+                        }
+                    }
+
+                    if (players.length === 0) {
+                        playerGrid.innerHTML = `
+                  <div class="empty-state">
+                    <h2 style="color: var(--color-gray-400);">ยังไม่มีคนสมัครเลย...</h2>
+                    <p style="color: var(--color-gray-500);">เป็นคนแรกที่เริ่มการเดินทางนี้!</p>
+                  </div>
+                `;
+                        return;
+                    }
+
+                    playerGrid.innerHTML = '';
+                    players.forEach(player => {
+                        const safeTeamId = player.team.replace(/[^a-zA-Z0-9]/g, '');
+                        let logoSrc;
+                        if (player.team === "Liverpool") {
+                            logoSrc = 'assets/clubs/Liverpool.png';
+                        } else if (player.team === "Aston Villa") {
+                            logoSrc = 'https://resources.premierleague.com/premierleague/badges/t7.svg';
+                        } else {
+                            logoSrc = `assets/clubs/${safeTeamId}.svg`;
+                        }
+
+                        const card = document.createElement('div');
+                        card.className = 'player-card';
+                        card.setAttribute('data-aos', 'fade-up');
+                        card.setAttribute('data-aos-delay', (players.indexOf(player) * 50).toString()); // Stagger effect
+                        card.setAttribute('data-tilt', '');
+                        card.setAttribute('data-tilt-max', '10');
+                        card.setAttribute('data-tilt-speed', '400');
+                        card.setAttribute('data-tilt-glare', 'true');
+                        card.setAttribute('data-tilt-max-glare', '0.2');
+
+                        // Handling logo with error fallback inside the card HTML
+                        card.innerHTML = `
+                  <img src="${logoSrc}" alt="${player.team}" class="player-team-logo" 
+                       onerror="this.src='assets/clubs/${safeTeamId}.png'; this.onerror=function(){this.src='assets/school-logo.png'}">
+                  <div class="player-info-content">
+                    <h3>${player.playerName}</h3>
+                    <p style="margin: 0.25rem 0;"><strong>ชั้นเรียน:</strong> ${player.fullClass || '-'}</p>
+                    <p style="margin: 0.25rem 0;"><strong>ทีม:</strong> ${player.team}</p>
+                    <div class="player-id-tag">ID: ${player.gamingId}</div>
+                  </div>
+                `;
+                        playerGrid.appendChild(card);
+                    });
+
+                    // Important: Initialize VanillaTilt for dynamically created elements
+                    setTimeout(() => {
+                        if (typeof VanillaTilt !== 'undefined') {
+                            VanillaTilt.init(document.querySelectorAll(".player-card"));
+                        }
+                    }, 100);
+                });
+            }, 500);
+        });
+    </script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="interactions.js"></script>
+</body>
+
+</html>

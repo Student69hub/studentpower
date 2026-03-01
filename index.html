@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>พรรคนักเรียน | หน้าแรก</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/school-logo.png" alt="โลโก้พรรคนักเรียน" class="nav-logo-img">
+        <span class="nav-logo-text">พรรคนักเรียน</span>
+      </a>
+      <button type="button" class="nav-toggle" id="nav-toggle" aria-label="เปิดเมนู">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" class="active">หน้าแรก</a></li>
+        <li><a href="policy.html">นโยบาย</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="contact.html">ติดต่อ</a></li>
+        <li><a href="members.html">สมาชิก</a></li>
+        <li class="nav-item-dropdown">
+          <a href="#" class="nav-dropdown-toggle">ประกาศข่าวสาร ▾</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="news-efootball.html">ข่าวสาร Efootball</a></li>
+            <li><a href="news-classroom.html">ประกวดห้องเรียน</a></li>
+            <li><a href="news-general.html">ข่าวสารทั่วไป</a></li>
+          </ul>
+        </li>
+        <li class="nav-item-dropdown">
+          <a href="efootball.html" class="nav-dropdown-toggle">การแข่งขัน Efootball ▾</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="efootball-register.html">สมัครนักแข่ง</a></li>
+            <li><a href="efootball.html">ตารางคะแนน</a></li>
+            <li><a href="efootball-players.html">รายชื่อนักแข่ง</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main-content" class="page-enter">
+    <section class="page-hero" style="position: relative;">
+      <div id="particles-js" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 0;"></div>
+      <div class="container" style="position: relative; z-index: 1;" data-aos="zoom-in">
+        <h1>พรรคนักเรียน</h1>
+        <p>เสียงของนักเรียน เพื่อโรงเรียนที่ดีกว่า เราพร้อมนำพานโยบายที่ตอบโจทย์ชีวิตในโรงเรียนไปปฏิบัติจริง</p>
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+          <a href="policy.html" class="btn btn-primary">ดูนโยบายทั้งหมด</a>
+          <a href="contact.html" class="btn btn-outline">ติดต่อเรา</a>
+        </div>
+      </div>
+    </section>
+
+
+
+
+    <!-- ===== Mission Highlight Section ===== -->
+    <section class="content-section mission-section" data-aos="fade-up">
+      <div class="container text-center">
+        <h2 class="section-title">วิสัยทัศน์ของเรา (Our Mission)</h2>
+        <p class="mission-text">
+          เรามุ่งมั่นที่จะเป็นเสียงที่แท้จริงของนักเรียนทุกคน เพื่อสร้างสรรค์สภาพแวดล้อมในโรงเรียนที่ดีกว่า
+          และตอบโจทย์นักเรียนทุกคน
+        </p>
+        <div class="floating-elements-container">
+          <div class="float-item float-1">💡<br><span>ความคิดสร้างสรรค์</span></div>
+          <div class="float-item float-2">🤝<br><span>ความเท่าเทียม</span></div>
+          <div class="float-item float-3">🚀<br><span>ก้าวไปข้างหน้า</span></div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- ===== eFootball Promo Section ===== -->
+    <section class="content-section efootball-promo-section" data-aos="fade-up" data-aos-delay="200">
+      <div class="container">
+        <div class="promo-box" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true"
+          data-tilt-max-glare="0.2">
+          <div class="promo-content">
+            <h2>🏆 eFootball Student League</h2>
+            <p>ติดตามการแข่งขันของตัวแทนนักเรียนทั้ง 20 ทีมในลีกจำลองพรีเมียร์ลีกอังกฤษ พร้อมอัปเดตตารางคะแนนแบบ
+              Real-time</p>
+            <a href="efootball.html" class="btn btn-primary btn-large glow-btn"
+              style="margin-top: 1.5rem;">คลิกดูตารางคะแนนล่าสุด</a>
+          </div>
+          <div class="promo-visual">
+            <div class="glowing-ball">⚽</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">พรรคนักเรียน</div>
+          <div class="footer-social">
+            <a href="https://www.instagram.com/n.xrongritt_/" target="_blank" rel="noopener noreferrer"
+              class="instagram" title="Instagram">@n.xrongritt_</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter">X</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Line">LINE</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          © พรรคนักเรียน — สร้างสรรค์เพื่อนักเรียน โดยนักเรียน
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="interactions.js"></script>
+</body>
+
+</html>

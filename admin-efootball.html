@@ -1,0 +1,806 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | eFootball League</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            padding-bottom: 5rem;
+        }
+
+        .admin-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .team-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .team-row label {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group span {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1);
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        #auth-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            color: white;
+        }
+
+        .pwd-input {
+            padding: 0.75rem 1rem;
+            font-size: 1.25rem;
+            border-radius: 8px;
+            border: none;
+            margin: 1rem 0;
+            width: 300px;
+            text-align: center;
+        }
+
+        /* Quick Match Style */
+        .quick-entry-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .quick-entry-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 0.5fr 1.5fr auto;
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        .quick-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .quick-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        select,
+        .score-input {
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #1e293b;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .score-input {
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            width: 70px;
+        }
+
+        .vs-text {
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #ff7300;
+            text-align: center;
+            padding-bottom: 0.75rem;
+        }
+
+        /* Tabs Style */
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: #0f172a;
+        }
+
+        .tab-btn.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Player Management Style */
+        .players-table-container {
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .players-table th,
+        .players-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .players-table th {
+            background: #f8fafc;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .players-table tbody tr:hover {
+            background: #f1f5f9;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 768px) {
+            .admin-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .admin-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+                flex: 1;
+                text-align: center;
+            }
+
+            .quick-entry-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .quick-group {
+                align-items: center;
+            }
+
+            .quick-group select {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .vs-text {
+                padding: 0;
+                margin: -0.5rem 0;
+            }
+
+            #add-match-btn {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .team-row {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 0.75rem;
+            }
+
+            .team-row label {
+                grid-column: 1 / -1;
+                margin-bottom: 0.5rem;
+                font-size: 1.1rem;
+                border-bottom: 1px solid #e2e8f0;
+                padding-bottom: 0.5rem;
+            }
+
+            .action-bar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .action-bar button {
+                width: 100%;
+            }
+
+            /* Auth overlay responsive */
+            .pwd-input {
+                width: 90%;
+            }
+
+            #login-btn {
+                width: 90% !important;
+            }
+        }
+    </style>
+
+  
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="particles-js-global" style="position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; z-index: -2; pointer-events: none;"></div>
+
+  <!-- Authentication Overlay -->
+    <div id="auth-overlay">
+        <h2>🔒 กรุณาใส่รหัสผ่านแอดมิน</h2>
+        <p>Admin Password Required</p>
+        <input type="password" id="admin-pwd" class="pwd-input" placeholder="Password...">
+        <button id="login-btn" class="btn btn-primary" style="width: 300px;">เข้าสู่ระบบ (Login)</button>
+        <p id="auth-error" style="color: #ef4444; margin-top: 1rem; display: none;">รหัสผ่านไม่ถูกต้อง!</p>
+    </div>
+
+    <div class="admin-container" id="admin-panel" style="display: none;">
+        <div class="admin-header">
+            <div>
+                <h1 style="color: var(--color-dark); margin:0;">⚙️ ระบบจัดการ Efootball League</h1>
+                <p style="margin:0; color: #64748b;">แอดมินสามารถจัดการคะแนน แบนผู้เล่น หรือลบข้อมูลผู้เล่นได้ที่นี่</p>
+            </div>
+            <a href="efootball.html" class="btn btn-outline" target="_blank">ดูหน้าตารางจริง</a>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="switchTab('scores-tab')">จัดการคะแนน</button>
+            <button class="tab-btn" onclick="switchTab('players-tab')">จัดการนักแข่ง (ลบ/แบน)</button>
+        </div>
+
+        <!-- TAB: Scores Management -->
+        <div id="scores-tab" class="tab-pane active">
+            <div id="global-loading-indicator"
+                style="text-align: center; color: var(--color-primary); margin-bottom: 2rem; display: none;">
+                กำลังเรียกดึงข้อมูลจากฐานข้อมูล... ⏳
+            </div>
+
+            <div class="quick-entry-card">
+                <h3 style="margin-top: 0; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.5rem;">⚡</span> ลงคะแนนแบบด่วน (Quick Match Entry)
+                </h3>
+                <div class="quick-entry-grid">
+                    <div class="quick-group">
+                        <label>ทีมเหย้า (Home)</label>
+                        <select id="home-team-select"></select>
+                        <input type="number" id="home-score" class="score-input" value="0" min="0">
+                    </div>
+                    <div class="vs-text">VS</div>
+                    <div class="quick-group">
+                        <label>ทีมเยือน (Away)</label>
+                        <select id="away-team-select"></select>
+                        <input type="number" id="away-score" class="score-input" value="0" min="0">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="add-match-btn"
+                        style="height: 50px; padding: 0 2rem;">
+                        ➕ เพิ่มผลการแข่ง
+                    </button>
+                </div>
+                <p style="margin-top: 1rem; margin-bottom: 0; font-size: 0.85rem; color: #94a3b8;">
+                    * ระบบจะคำนวณ ชนะ-เสมอ-แพ้ และประตูได้เสียให้ทั้ง 2 ทีมโดยอัตโนมัติ
+                </p>
+            </div>
+
+            <form id="scores-form">
+                <div id="teams-container">
+                    <!-- JS will inject 20 team rows here -->
+                </div>
+            </form>
+        </div>
+
+        <!-- TAB: Players Management -->
+        <div id="players-tab" class="tab-pane">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 style="margin: 0;">รายชื่อนักแข่ง (Realtime Data)</h2>
+                <span id="player-count"
+                    style="font-weight: 700; color: var(--color-primary); background: rgba(255,115,0,0.1); padding: 0.5rem 1rem; border-radius: 9999px;">
+                    0 / 20 ทีม
+                </span>
+            </div>
+            <div class="players-table-container">
+                <table class="players-table">
+                    <thead>
+                        <tr>
+                            <th>ทีม (Team)</th>
+                            <th>Gaming ID</th>
+                            <th>ชั้นเรียน</th>
+                            <th>ชื่อนักแข่ง (Player Name)</th>
+                            <th>วันที่สมัคร</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="players-table-body">
+                        <!-- JS injects players here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-bar" id="action-bar" style="display: none;">
+        <button type="button" class="btn btn-outline" id="reset-btn"
+            style="border-color: #ef4444; color: #ef4444;">ล้างข้อมูล (รีเซ็ตศูนย์)</button>
+        <button type="button" class="btn btn-primary" id="save-btn" style="padding: 0.75rem 3rem;">💾 บันทึกตารางคะแนน
+            (Save)</button>
+    </div>
+
+    <!-- Ban Modal -->
+    <div id="ban-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;"
+        onclick="if(event.target === this) closeBanModal()">
+        <div
+            style="background:white; padding:2rem; border-radius:8px; width:90%; max-width:400px; text-align:left; position:relative;">
+            <button type="button" onclick="closeBanModal()"
+                style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:#94a3b8;">&times;</button>
+            <h3 style="margin-top:0; padding-right:1.5rem;">แบนผู้เล่น: <span id="ban-player-name"
+                    style="color:var(--color-primary);"></span>
+            </h3>
+            <p style="margin-bottom:0.5rem; color:#64748b; font-size:0.9rem;">ผู้เล่นคนนี้จะถูกลบออกจากทัวร์นาเมนต์
+                (ทีมจะว่างให้คนอื่นเลือกได้) และพวกเขาจะไม่สามารถสมัครใหม่ได้ในช่วงเวลาที่กำหนด</p>
+            <p style="margin-bottom:0.5rem; font-weight:600;">เลือกระยะเวลาการแบน:</p>
+            <select id="ban-duration" class="score-input"
+                style="width:100%; margin-bottom:1.5rem; text-align:left; font-size:1rem;">
+                <option value="10">10 นาที</option>
+                <option value="60">1 ชั่วโมง</option>
+                <option value="1440">1 วัน (24 ชั่วโมง)</option>
+                <option value="10080">7 วัน</option>
+                <option value="permanent">แบนถาวร</option>
+            </select>
+            <div style="display:flex; gap:1rem; justify-content:flex-end;">
+                <button type="button" class="btn btn-outline" onclick="closeBanModal()"
+                    style="padding:0.5rem 1rem;">ยกเลิก</button>
+                <button type="button" class="btn btn-danger" onclick="confirmBan()"
+                    style="padding:0.5rem 1rem;">ยืนยันแบน</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PASSWORD = "admin"; // Simple hardcoded password for static site
+    </script>
+    <script type="module" src="firebase-config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        const TEAMS = [
+            "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton & Hove Albion",
+            "Burnley", "Chelsea", "Crystal Palace", "Everton", "Fulham",
+            "Leeds United", "Liverpool", "Manchester City", "Manchester United", "Newcastle United",
+            "Nottingham Forest", "Sunderland", "Tottenham Hotspur", "West Ham United", "Wolverhampton Wanderers"
+        ];
+
+        let globalPlayersData = []; // To store id and info
+
+        // --- Authentication Logic ---
+        function checkAuth() {
+            sessionStorage.setItem('admin_logged_in', 'true');
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            document.getElementById('action-bar').style.display = 'flex';
+            initAdminPanel();
+        }
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const pwd = document.getElementById('admin-pwd').value;
+            if (pwd === PASSWORD) { // Simple password for demo
+                checkAuth();
+            } else {
+                document.getElementById('auth-error').style.display = 'block';
+            }
+        });
+
+        document.getElementById('admin-pwd').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') document.getElementById('login-btn').click();
+        });
+
+        // Remove the local storage checks for login since we want to rely on the overlay for simplicity, 
+        // but if previously logged in this session:
+        if (sessionStorage.getItem('admin_logged_in') === 'true') {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            document.getElementById('action-bar').style.display = 'flex';
+            // Wait a tiny bit for window.firebaseDB to be loaded before initializing
+            setTimeout(initAdminPanel, 500);
+        }
+
+        // --- Data Management (Firebase) ---
+
+        function initAdminPanel() {
+            const homeSelect = document.getElementById('home-team-select');
+            const awaySelect = document.getElementById('away-team-select');
+
+            document.getElementById('global-loading-indicator').style.display = 'block';
+
+            // Populate Dropdowns
+            const selectOptions = TEAMS.map(t => `<option value="${t}">${t}</option>`).join('');
+            homeSelect.innerHTML = selectOptions;
+            awaySelect.innerHTML = selectOptions;
+            awaySelect.selectedIndex = 1; // Default different team
+
+            // Listen to data from firebase
+            listenToScores();
+            listenToPlayers();
+        }
+
+        function listenToScores() {
+            if (!window.firebaseDB) {
+                setTimeout(listenToScores, 500);
+                return;
+            }
+            const scoresRef = window.firebaseRef(window.firebaseDB, 'scores');
+            window.firebaseOnValue(scoresRef, (snapshot) => {
+                let data = {};
+                if (snapshot.exists()) {
+                    data = snapshot.val();
+                } else {
+                    // Initialize empty
+                    TEAMS.forEach(team => {
+                        data[team] = { played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 };
+                    });
+                }
+                document.getElementById('global-loading-indicator').style.display = 'none';
+                renderTeamRows(data);
+            });
+        }
+
+        function listenToPlayers() {
+            if (!window.firebaseDB) {
+                setTimeout(listenToPlayers, 500);
+                return;
+            }
+            const playersRef = window.firebaseRef(window.firebaseDB, 'players');
+            window.firebaseOnValue(playersRef, (snapshot) => {
+                globalPlayersData = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        globalPlayersData.push({
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        });
+                    });
+                }
+                renderPlayersTable();
+            });
+        }
+
+        function renderTeamRows(data) {
+            const container = document.getElementById('teams-container');
+            container.innerHTML = '';
+            TEAMS.forEach(team => {
+                const stats = data[team] || { played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0 };
+                const safeTeamId = team.replace(/[^a-zA-Z0-9]/g, '');
+
+                container.innerHTML += `
+          <div class="team-row">
+            <label>${team}</label>
+            <div class="input-group"><span>เตะ (Played)</span><input type="number" id="${safeTeamId}-p" value="${stats.played}" min="0"></div>
+            <div class="input-group"><span>ชนะ (W)</span><input type="number" id="${safeTeamId}-w" value="${stats.won}" min="0"></div>
+            <div class="input-group"><span>เสมอ (D)</span><input type="number" id="${safeTeamId}-d" value="${stats.drawn}" min="0"></div>
+            <div class="input-group"><span>แพ้ (L)</span><input type="number" id="${safeTeamId}-l" value="${stats.lost}" min="0"></div>
+            <div class="input-group"><span>ได้ (GF)</span><input type="number" id="${safeTeamId}-gf" value="${stats.gf}" min="0"></div>
+            <div class="input-group"><span>เสีย (GA)</span><input type="number" id="${safeTeamId}-ga" value="${stats.ga}" min="0"></div>
+          </div>
+        `;
+            });
+        }
+
+        document.getElementById('add-match-btn').addEventListener('click', () => {
+            const homeTeam = document.getElementById('home-team-select').value;
+            const awayTeam = document.getElementById('away-team-select').value;
+            const homeScore = parseInt(document.getElementById('home-score').value) || 0;
+            const awayScore = parseInt(document.getElementById('away-score').value) || 0;
+
+            if (homeTeam === awayTeam) {
+                alert('กรุณาเลือกทีมที่ต่างกัน!');
+                return;
+            }
+
+            // Update stats in the inputs directly (so user can see change before saving)
+            updateTeamInput(homeTeam, homeScore, awayScore);
+            updateTeamInput(awayTeam, awayScore, homeScore);
+
+            alert(`บันทึกผล ${homeTeam} ${homeScore} - ${awayScore} ${awayTeam} ลงในตารางด้านล่างแล้ว! (อย่าลืมกดยืนยันบันทึกด้านล่างด้วยนะครับ)`);
+        });
+
+        function updateTeamInput(teamName, gf, ga) {
+            const safeId = teamName.replace(/[^a-zA-Z0-9]/g, '');
+            const p = document.getElementById(`${safeId}-p`);
+            const w = document.getElementById(`${safeId}-w`);
+            const d = document.getElementById(`${safeId}-d`);
+            const l = document.getElementById(`${safeId}-l`);
+            const gfInput = document.getElementById(`${safeId}-gf`);
+            const gaInput = document.getElementById(`${safeId}-ga`);
+
+            p.value = parseInt(p.value) + 1;
+            gfInput.value = parseInt(gfInput.value) + gf;
+            gaInput.value = parseInt(gaInput.value) + ga;
+
+            if (gf > ga) w.value = parseInt(w.value) + 1;
+            else if (gf === ga) d.value = parseInt(d.value) + 1;
+            else l.value = parseInt(l.value) + 1;
+        }
+
+        document.getElementById('save-btn').addEventListener('click', async () => {
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = "กำลังบันทึก...";
+
+            let newData = {};
+            TEAMS.forEach(team => {
+                const safeTeamId = team.replace(/[^a-zA-Z0-9]/g, '');
+                newData[team] = {
+                    played: parseInt(document.getElementById(`${safeTeamId}-p`).value) || 0,
+                    won: parseInt(document.getElementById(`${safeTeamId}-w`).value) || 0,
+                    drawn: parseInt(document.getElementById(`${safeTeamId}-d`).value) || 0,
+                    lost: parseInt(document.getElementById(`${safeTeamId}-l`).value) || 0,
+                    gf: parseInt(document.getElementById(`${safeTeamId}-gf`).value) || 0,
+                    ga: parseInt(document.getElementById(`${safeTeamId}-ga`).value) || 0,
+                };
+            });
+
+            try {
+                const scoresRef = window.firebaseRef(window.firebaseDB, 'scores');
+                await window.firebaseSet(scoresRef, newData);
+                alert('บันทึกข้อมูลเรียบร้อยแล้ว! ตารางคะแนนหน้าเว็บอัปเดตแล้วครับ');
+            } catch (error) {
+                console.error(error);
+                alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+            }
+
+            saveBtn.disabled = false;
+            saveBtn.textContent = "💾 บันทึกคะแนนทั้งหมด";
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', async () => {
+            if (confirm('คุณแน่ใจหรือไม่ว่าจะรีเซ็ตคะแนนทุกทีมเป็น 0? (การกระทำนี้ย้อนกลับไม่ได้)')) {
+                try {
+                    const scoresRef = window.firebaseRef(window.firebaseDB, 'scores');
+                    await window.firebaseRemove(scoresRef);
+                    alert('รีเซ็ตข้อมูลคะแนนเรียบร้อยแล้ว');
+                } catch (e) {
+                    alert('เกิดข้อผิดพลาดในการรีเซ็ตข้อมูล');
+                }
+            }
+        });
+
+        // Add Player Management Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+
+            // Hide action bar if not on scores tab
+            if (tabId === 'scores-tab') {
+                document.getElementById('action-bar').style.display = 'flex';
+            } else {
+                document.getElementById('action-bar').style.display = 'none';
+            }
+        }
+
+        function renderPlayersTable() {
+            const players = globalPlayersData;
+            const tbody = document.getElementById('players-table-body');
+            const countLabel = document.getElementById('player-count');
+
+            countLabel.textContent = `${players.length} / 20 ทีม`;
+            tbody.innerHTML = '';
+
+            if (players.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #64748b; padding: 2rem;">ยังไม่มีผู้ลงทะเบียน</td></tr>`;
+                return;
+            }
+
+            players.forEach((p) => {
+                const safeId = p.team.replace(/[^a-zA-Z0-9]/g, '');
+                let logoSrc = `assets/clubs/${safeId}.svg`;
+                if (p.team === "Liverpool") logoSrc = 'assets/clubs/Liverpool.png';
+                if (p.team === "Aston Villa") logoSrc = 'https://resources.premierleague.com/premierleague/badges/t7.svg';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <img src="${logoSrc}" width="32" height="32" style="object-fit: contain;" onerror="this.src='assets/clubs/${safeId}.png'; this.onerror=function(){this.src='assets/school-logo.png'};">
+                                <span style="font-weight: 700;">${p.team}</span>
+                            </div>
+                        </td>
+                        <td style="font-weight: 600; color: var(--color-primary);">${p.gamingId}</td>
+                        <td style="color: #475569;">${p.fullClass || '-'}</td>
+                        <td>${p.playerName}</td>
+                        <td style="color: #64748b; font-size: 0.9rem;">${p.regDate}</td>
+                        <td>
+                            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                                <button class="btn-outline" style="padding:0.25rem 0.5rem; font-size:0.85rem; border-color:#e2e8f0; color:#64748b; border-radius:4px; border:1px solid;" onclick="removePlayer('${p.id}', '${p.playerName}', '${p.team}')">
+                                    🗑️ ลบเฉยๆ
+                                </button>
+                                <button class="btn-danger" style="padding:0.25rem 0.5rem; font-size:0.85rem; border-radius:4px;" onclick="openBanModal('${p.id}', '${p.playerName}', '${p.team}', '${p.gamingId}')">
+                                    🚫 แบน
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        window.removePlayer = async function (playerId, playerName, team) {
+            if (confirm(`คุณต้องการลบข้อมูลของ ${playerName} (ทีม ${team}) ใช่หรือไม่?\n\n* การลบจะทำให้ทีมว่างให้คนอื่นสมัครใหม่ได้ทันที แต่ผู้เล่นคนเดิมยังสามารถกลับมาสมัครใหม่ได้ (ถ้าไม่ได้ทำการแบน)`)) {
+                try {
+                    const playerRef = window.firebaseRef(window.firebaseDB, 'players/' + playerId);
+                    await window.firebaseRemove(playerRef);
+                    alert(`ลบ ${playerName} ออกจากฐานข้อมูลเรียบร้อยแล้ว`);
+                } catch (error) {
+                    console.error(error);
+                    alert('เกิดข้อผิดพลาดในการลบข้อมูล');
+                }
+            }
+        };
+
+        let currentBanPlayer = null;
+
+        window.openBanModal = function (playerId, playerName, team, gamingId) {
+            currentBanPlayer = { id: playerId, playerName, team, gamingId };
+            document.getElementById('ban-player-name').textContent = playerName;
+            document.getElementById('ban-modal').style.display = 'flex';
+        };
+
+        window.closeBanModal = function () {
+            document.getElementById('ban-modal').style.display = 'none';
+            currentBanPlayer = null;
+        };
+
+        window.confirmBan = async function () {
+            if (!currentBanPlayer) return;
+            const duration = document.getElementById('ban-duration').value;
+            let banUntil = 0;
+
+            if (duration === 'permanent') {
+                banUntil = -1; // -1 means permanent ban
+            } else {
+                banUntil = Date.now() + (parseInt(duration) * 60 * 1000); // converting minutes to ms
+            }
+
+            try {
+                // 1. Add to bans list
+                const bansRef = window.firebaseRef(window.firebaseDB, 'bans');
+                const newBanRef = window.firebasePush(bansRef);
+                await window.firebaseSet(newBanRef, {
+                    playerName: currentBanPlayer.playerName,
+                    gamingId: currentBanPlayer.gamingId,
+                    banUntil: banUntil,
+                    bannedAt: Date.now()
+                });
+
+                // 2. Remove from players to free up the team
+                const playerRef = window.firebaseRef(window.firebaseDB, 'players/' + currentBanPlayer.id);
+                await window.firebaseRemove(playerRef);
+
+                alert(`แบน ${currentBanPlayer.playerName} และลบข้อมูลออกจากระบบแล้ว!`);
+                closeBanModal();
+            } catch (error) {
+                console.error(error);
+                alert('เกิดข้อผิดพลาดในการแบนข้อมูล');
+            }
+        };
+    </script>
+
+  
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="interactions.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,454 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครนักแข่ง | eFootball Student League</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .register-card {
+            max-width: 600px;
+            margin: 4rem auto;
+            background: var(--color-white);
+            border-radius: var(--radius-2xl);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid var(--color-gray-100);
+        }
+
+        .register-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .register-header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .register-header p {
+            margin: 0.5rem 0 0;
+            color: #94a3b8;
+        }
+
+        .register-body {
+            padding: 3rem 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-gray-200);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(255, 115, 0, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+
+        .team-preview {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--color-gray-50);
+            border-radius: var(--radius-lg);
+            display: none;
+        }
+
+        .team-preview img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+    </style>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="particles-js-global" style="position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; z-index: -2; pointer-events: none;"></div>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/school-logo.png" alt="โลโก้พรรคนักเรียน" class="nav-logo-img">
+                <span class="nav-logo-text">พรรคนักเรียน</span>
+            </a>
+            <button type="button" class="nav-toggle" id="nav-toggle" aria-label="เปิดเมนู">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">หน้าแรก</a></li>
+                <li class="nav-item-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">ประกาศข่าวสาร ▾</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="news-efootball.html">ข่าวสาร Efootball</a></li>
+                        <li><a href="news-classroom.html">ประกวดห้องเรียน</a></li>
+                        <li><a href="news-general.html">ข่าวสารทั่วไป</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item-dropdown">
+                    <a href="efootball.html" class="nav-dropdown-toggle active">การแข่งขัน Efootball ▾</a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="efootball-register.html" class="active">สมัครนักแข่ง</a></li>
+                        <li><a href="efootball.html">ตารางคะแนน</a></li>
+                        <li><a href="efootball-players.html">รายชื่อนักแข่ง</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="page-enter">
+        <div class="container container-center" id="registration-container">
+            <div class="register-card" id="form-card" data-aos="fade-up">
+                <div class="register-header">
+                    <h1>🎮 ลงทะเบียนนักแข่ง</h1>
+                    <p>เข้าร่วมการแข่งขัน eFootball Student League</p>
+                </div>
+                <div class="register-body">
+                    <form id="registration-form">
+                        <div class="form-group">
+                            <label>ชื่อ-นามสกุล หรือ ชื่อเล่น</label>
+                            <input type="text" id="player-name" class="form-control"
+                                placeholder="เช่น นายส้มหยุด สุดหล่อ" required>
+                        </div>
+                        <div class="form-group" style="display: none;">
+                            <label>Gaming ID (PSN / Steam / In-game ID)</label>
+                            <input type="hidden" id="gaming-id" class="form-control" value="AUTO_GENERATED">
+                        </div>
+                        <div class="form-group" style="display: flex; gap: 1rem;">
+                            <div style="flex: 1;">
+                                <label>ระดับชั้น</label>
+                                <select id="grade-select" class="form-control" required>
+                                    <option value="" disabled selected>เลือกชั้น...</option>
+                                    <option value="ป.1">ป.1</option>
+                                    <option value="ป.2">ป.2</option>
+                                    <option value="ป.3">ป.3</option>
+                                    <option value="ป.4">ป.4</option>
+                                    <option value="ป.5">ป.5</option>
+                                    <option value="ป.6">ป.6</option>
+                                    <option value="ม.1">ม.1</option>
+                                    <option value="ม.2">ม.2</option>
+                                    <option value="ม.3">ม.3</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1;">
+                                <label>ห้อง</label>
+                                <select id="room-select" class="form-control" required disabled>
+                                    <option value="" disabled selected>เลือกห้อง...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>เลือกทีมที่จะใช้แข่งขัน</label>
+                            <select id="team-select" class="form-control" required>
+                                <option value="" disabled selected>กรุณาเลือกทีม...</option>
+                            </select>
+                            <div id="team-preview" class="team-preview">
+                                <img id="preview-logo" src="" alt="Team Logo">
+                                <span id="preview-name" style="font-weight: 700;"></span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit">🚀 ส่งใบสมัคร (Register Now)</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="register-card" id="success-card" style="display: none; text-align: center; padding: 4rem 2rem;">
+                <h1 style="font-size: 4rem; margin-bottom: 1rem;">✅</h1>
+                <h2>คุณได้ลงทะเบียนไปแล้ว</h2>
+                <p style="color: var(--color-gray-500); margin-bottom: 2rem;">ขอบคุณที่เข้าร่วม eFootball Student
+                    League! คุณสามารถตรวจสอบรายชื่อนักแข่งและตารางคะแนนได้</p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <a href="efootball-players.html" class="btn btn-primary">ดูรายชื่อนักแข่ง</a>
+                    <a href="efootball.html" class="btn btn-outline"
+                        style="color:var(--color-dark); border-color:var(--color-gray-300);">ดูตารางคะแนน</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-bottom">
+                © พรรคนักเรียน — League Management System
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        const TEAMS = [
+            "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton & Hove Albion",
+            "Burnley", "Chelsea", "Crystal Palace", "Everton", "Fulham",
+            "Leeds United", "Liverpool", "Manchester City", "Manchester United", "Newcastle United",
+            "Nottingham Forest", "Sunderland", "Tottenham Hotspur", "West Ham United", "Wolverhampton Wanderers"
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const select = document.getElementById('team-select');
+            const preview = document.getElementById('team-preview');
+            const previewLogo = document.getElementById('preview-logo');
+            const previewName = document.getElementById('preview-name');
+            const formCard = document.getElementById('form-card');
+            const successCard = document.getElementById('success-card');
+
+            let globalPlayers = [];
+            let globalBans = [];
+
+            // 1. Check if this browser already registered (Local check)
+            const hasRegistered = localStorage.getItem('efootball_user_registered') === 'true';
+            if (hasRegistered) {
+                formCard.style.display = 'none';
+                successCard.style.display = 'block';
+                // We no longer return early, so we can check Firebase to see if they were deleted.
+            } else {
+                formCard.style.display = 'block';
+                successCard.style.display = 'none';
+            }
+
+            // 2. Wait for Firebase to load and fetch players & bans
+            setTimeout(() => {
+                if (!window.firebaseDB) {
+                    console.error("Firebase not loaded yet");
+                    return;
+                }
+
+                const playersRef = window.firebaseRef(window.firebaseDB, 'players');
+                const bansRef = window.firebaseRef(window.firebaseDB, 'bans');
+
+                window.firebaseOnValue(bansRef, (snapshot) => {
+                    globalBans = [];
+                    if (snapshot.exists()) {
+                        snapshot.forEach((childSnapshot) => {
+                            globalBans.push(childSnapshot.val());
+                        });
+                    }
+                });
+
+                window.firebaseOnValue(playersRef, (snapshot) => {
+                    globalPlayers = [];
+                    const takenTeams = [];
+
+                    if (snapshot.exists()) {
+                        snapshot.forEach((childSnapshot) => {
+                            const p = childSnapshot.val();
+                            globalPlayers.push(p);
+                            takenTeams.push(p.team);
+                        });
+                    }
+
+                    // Repopulate teams based on global taken teams
+                    select.innerHTML = '<option value="" disabled selected>กรุณาเลือกทีม...</option>';
+                    TEAMS.forEach(team => {
+                        const option = document.createElement('option');
+                        option.value = team;
+                        option.textContent = team;
+                        if (takenTeams.includes(team)) {
+                            option.disabled = true;
+                            option.textContent = `${team} (มีคนเลือกแล้ว)`;
+                        }
+                        select.appendChild(option);
+                    });
+
+                    // Verification: If registered but deleted, auto-reset!
+                    if (hasRegistered) {
+                        const storedName = localStorage.getItem('efootball_user_name');
+                        let shouldReset = false;
+                        if (globalPlayers.length === 0) {
+                            shouldReset = true;
+                        } else if (storedName) {
+                            const stillExists = globalPlayers.some(p => p.playerName && p.playerName.toLowerCase() === storedName.toLowerCase());
+                            if (!stillExists) {
+                                shouldReset = true;
+                            }
+                        }
+
+                        if (shouldReset) {
+                            localStorage.removeItem('efootball_user_registered');
+                            localStorage.removeItem('efootball_user_name');
+                            console.log("Auto-reset LocalStorage: User was deleted.");
+                            location.reload();
+                        }
+                    }
+                });
+            }, 500); // Give module a moment to attach to window
+
+            // Preview logo on change
+            select.addEventListener('change', () => {
+                const team = select.value;
+                const safeId = team.replace(/[^a-zA-Z0-9]/g, '');
+
+                preview.style.display = 'flex';
+                previewName.textContent = team;
+
+                // Custom logic for Liverpool and Aston Villa logos
+                if (team === "Liverpool") {
+                    previewLogo.src = 'assets/clubs/Liverpool.png';
+                } else if (team === "Aston Villa") {
+                    previewLogo.src = 'https://resources.premierleague.com/premierleague/badges/t7.svg';
+                } else {
+                    previewLogo.src = `assets/clubs/${safeId}.svg`;
+                    previewLogo.onerror = () => {
+                        previewLogo.src = `assets/clubs/${safeId}.png`;
+                        previewLogo.onerror = () => {
+                            previewLogo.src = 'assets/school-logo.png';
+                        };
+                    };
+                }
+            });
+
+            // Handle dynamic room selection based on grade
+            const gradeSelect = document.getElementById('grade-select');
+            const roomSelect = document.getElementById('room-select');
+
+            gradeSelect.addEventListener('change', () => {
+                const grade = gradeSelect.value;
+                roomSelect.innerHTML = '<option value="" disabled selected>เลือกห้อง...</option>';
+                roomSelect.disabled = false;
+
+                let numRooms = 2; // Default 2 rooms
+                if (grade === 'ป.5') {
+                    numRooms = 3; // P.5 has 3 rooms
+                }
+
+                for (let i = 1; i <= numRooms; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `ห้อง ${i}`;
+                    roomSelect.appendChild(option);
+                }
+            });
+
+            // Handle form submission
+            document.getElementById('registration-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const playerName = document.getElementById('player-name').value.trim();
+                const grade = gradeSelect.value;
+                const room = roomSelect.value;
+                const fullClass = `${grade}/${room}`; // Combine into e.g. "ป.5/3"
+                const team = select.value;
+
+                // Auto-generate Gaming ID sequentially (1, 2, 3...)
+                // We add +1 to the length since it's the *next* player
+                let nextIdNumber = 1;
+                if (globalPlayers.length > 0) {
+                    // Try to extract highest number from existing IDs to support deletions cleanly
+                    const explicitIDs = globalPlayers
+                        .map(p => parseInt(String(p.gamingId).replace(/[^0-9]/g, '')) || 0)
+                        .filter(n => !isNaN(n));
+                    if (explicitIDs.length > 0) {
+                        nextIdNumber = Math.max(...explicitIDs) + 1;
+                    } else {
+                        nextIdNumber = globalPlayers.length + 1;
+                    }
+                }
+                const gamingId = String(nextIdNumber);
+
+                // Check active bans
+                const now = Date.now();
+                const activeBan = globalBans.find(b =>
+                    (b.gamingId.toLowerCase() === gamingId.toLowerCase() ||
+                        b.playerName.toLowerCase() === playerName.toLowerCase()) &&
+                    (b.banUntil === -1 || b.banUntil > now)
+                );
+
+                if (activeBan) {
+                    if (activeBan.banUntil === -1) {
+                        alert('คุณถูกระงับสิทธิ์การแข่งขันถาวร เนื่องจากทำผิดกฎ ไม่สามารถลงทะเบียนได้อีก!');
+                    } else {
+                        const remainingMinutes = Math.ceil((activeBan.banUntil - now) / 60000);
+                        let timeStr = `${remainingMinutes} นาที`;
+                        if (remainingMinutes > 60) timeStr = `${Math.floor(remainingMinutes / 60)} ชั่วโมง ${remainingMinutes % 60} นาที`;
+                        if (remainingMinutes > 1440) timeStr = `${Math.floor(remainingMinutes / 1440)} วัน`;
+
+                        alert(`คุณกำลังอยู่ในช่วงถูกระงับสิทธิ์ (แบน) กรุณารออีกประมาณ ${timeStr} จึงจะสามารถลงทะเบียนใหม่ได้!`);
+                    }
+                    return;
+                }
+
+                if (globalPlayers.some(p => p.playerName.toLowerCase() === playerName.toLowerCase())) {
+                    alert('ชื่อ-นามสกุล หรือชื่อเล่นนี้ถูกสมัครไปแล้ว!');
+                    return;
+                }
+                if (globalPlayers.some(p => p.team === team)) {
+                    alert('ทีมนี้ถูกเลือกไปแล้ว กรุณาเลือกทีมอื่น!');
+                    return;
+                }
+
+                // Disable button during submit
+                const submitBtn = document.querySelector('.btn-submit');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'กำลังบันทึกข้อมูล...';
+
+                try {
+                    const newPlayerRef = window.firebasePush(window.firebaseRef(window.firebaseDB, 'players'));
+                    await window.firebaseSet(newPlayerRef, {
+                        playerName,
+                        gamingId, // This is now the sequential ID
+                        fullClass, // Store "ป.1/2" format
+                        team,
+                        regDate: new Date().toLocaleDateString('th-TH')
+                    });
+
+                    localStorage.setItem('efootball_user_registered', 'true'); // Prevent duplicate local
+                    localStorage.setItem('efootball_user_name', playerName); // Save name to check for deletion
+
+                    alert('สมัครเรียบร้อยแล้ว! ขอบคุณที่เข้าร่วมการแข่งขันครับ');
+                    window.location.href = 'efootball-players.html';
+                } catch (error) {
+                    console.error("Error saving to Firebase", error);
+                    alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่");
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '🚀 ส่งใบสมัคร (Register Now)';
+                }
+            });
+        });
+    </script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="interactions.js"></script>
+</body>
+
+</html>
